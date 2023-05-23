@@ -1,39 +1,47 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
-import { createStore, applyMiddleware, compose } from 'redux'
+import { createStore, applyMiddleware, compose } from 'redux';
 import rootReducer from './store/reducers/rootReducer';
-import { Provider } from 'react-redux'
-import thunk from 'redux-thunk'
-import { reduxFirestore, getFirestore } from 'redux-firestore'
-import { reactReduxFirebase, getFirebase } from 'react-redux-firebase'
-// import fbConfig from './config/fbConfig'
-import fbConfig from './config/fbConfig'
+import { Provider } from 'react-redux';
+import thunk from 'redux-thunk';
+import { createFirestoreInstance, getFirestore } from 'redux-firestore';
+import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
+import fbConfig from './config/fbConfig';
 
-const store = createStore(rootReducer, 
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+
+const store = createStore(
+  rootReducer,
   compose(
     applyMiddleware(thunk.withExtraArgument({ getFirebase, getFirestore })),
-    reduxFirestore(fbConfig),
-    reactReduxFirebase(fbConfig)
   )
-  );
+);
 
-// A single reducer handling the other reducers are passed here
+const rrfConfig = {
+  userProfile: 'users',
+  useFirestoreForProfile: true,
+};
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+const rrfProps = {
+  firebase,
+  config: fbConfig,
+  dispatch: store.dispatch,
+  createFirestoreInstance,
+};
+
+ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <App />
+      </ReactReduxFirebaseProvider>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
+
 registerServiceWorker();
-
-
-
-// store is created in index.js
-// thunk is a middleware and it is applied as a second parameter in the createStore method.
-// To apply it as a second parameter, it is done with applyMiddleware where it is supplied as a parameter

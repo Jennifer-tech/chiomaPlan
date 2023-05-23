@@ -1,9 +1,8 @@
-import firebase from 'firebase';
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from 'firebase/auth'
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
 
-const firebaseConfig = {
+const fbConfig = {
   apiKey: "AIzaSyBNB5b8fHAfHapKYpOy94ePh6pGjn9Ie8w",
   authDomain: "chiomaplan.firebaseapp.com",
   projectId: "chiomaplan",
@@ -12,15 +11,9 @@ const firebaseConfig = {
   appId: "1:947925466704:web:296f1b71383ef66d939b55"
 };
 
-// Initialize Firebase
-// firebase.initializeApp(fbConfig);
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(firebaseConfig)
-const db = getFirestore(app); 
+// Use this to initialize the firebase App
+firebase.initializeApp(fbConfig);
 
+export default fbConfig;
 
-// const firebaseApp = firebase.initializeApp(firebaseConfig);
-// const db = firebase.firestore();
-// const auth = firebase.auth();
-
-export { app, db, auth };
+export const auth = firebase.auth;
