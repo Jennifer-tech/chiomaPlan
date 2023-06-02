@@ -12,7 +12,7 @@ import { ReactReduxFirebaseProvider, getFirebase } from 'react-redux-firebase';
 import fbConfig from './config/fbConfig';
 
 import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
+// import 'firebase/compat/auth';
 
 const store = createStore(
   rootReducer,
@@ -23,7 +23,8 @@ const store = createStore(
 
 const rrfConfig = {
   userProfile: 'users',
-  useFirestoreForProfile: true,
+  useFirestoreForProfile: true,  // This is firbase reducer to use firestore our database to sync the profile object on the state we have
+  attachAuthIsReady: true,
 };
 
 const rrfProps = {
